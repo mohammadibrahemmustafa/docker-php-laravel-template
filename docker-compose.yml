@@ -1,0 +1,78 @@
+version: '3'
+services:
+   database:
+       image: mysql:5.7
+       container_name: ${APP_NAME}_mysql
+       restart: always
+       environment:
+           MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+           MYSQL_DATABASE: ${MYSQL_DATABASE}
+           MYSQL_USER: ${MYSQL_USER}
+           MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+       ports:
+           - ${PORT_DATABASE}:3306
+       volumes:
+           - "./data/db/mysql:/var/lib/mysql"
+           - "./etc/mysql:/etc/mysql/conf.d"
+   mailcatcher:
+       image: schickling/mailcatcher
+       container_name: ${APP_NAME}_mailcatcher
+       ports:
+           - ${PORT_MAILCATCHER}:1080
+   redis:
+       container_name: ${APP_NAME}_redis
+       image: redis
+       ports:
+         - "${PORT_REDIS}:6379"
+       volumes:
+         - "./data/redis:/data"
+       restart: always
+   myadmin:
+       image: phpmyadmin/phpmyadmin
+       container_name: ${APP_NAME}_phpmyadmin
+       ports:
+           - ${PORT_PHPMYADMIN}:80
+       restart: always
+       links:
+           - database:db
+       depends_on:
+           - database
+   php:
+       build:
+         context: ./etc/php
+         args:
+           - INSTALL_NODE=${INSTALL_NODE}
+           - INSTALL_GULP=${INSTALL_GULP}
+           - INSTALL_BOWER=${INSTALL_BOWER}
+           - INSTALL_POSTGRESQL=${INSTALL_POSTGRESQL}
+           - INSTALL_MYSQL=${INSTALL_MYSQL}
+           - INSTALL_GD=${INSTALL_GD}
+           - ADD_ALIASES=${ADD_ALIASES}
+           - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+       container_name: ${APP_NAME}_php
+       entrypoint: sh /bin/entrypoint.sh php-fpm
+       links:
+           - database:mysqldb
+       restart: always
+       volumes:
+           - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+           - ${APP_PATH}:/var/www/html
+           - './etc/log/nginx:/var/log/nginx'
+           - ./etc/php/entrypoint.sh:/bin/entrypoint.sh
+   web:
+       build: ./etc/nginx
+       container_name: ${APP_NAME}_nginx
+       ports:
+           - ${PORT_HTTP}:80
+           - ${PORT_HTTPS}:443
+       restart: always
+       volumes:
+           - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
+           - "./etc/nginx/app.conf:/etc/nginx/sites-available/application.conf"
+           - "./etc/nginx/app.conf:/etc/nginx/sites-enabled/application"
+           - "./etc/ssl:/etc/ssl"
+           - './etc/log/nginx:/var/log/nginx'
+           - ${APP_PATH}:/var/www/html
+       depends_on:
+           - php
+           - database
