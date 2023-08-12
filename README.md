@@ -42,8 +42,17 @@ docker inspect <container id>
 
  command. The container ID can be found by running the docker ps command. In our case, the container is named MyApplication_nginx.
 
-5. In the project directory, make a public folder and inside it create a index.php file for testing 
+5. Go to the php container 
+```
+docker exec -it MyApplication_php bash
+```
 
- Now the app should be accessible via [this link](http://myapp.test)
+6. Run the commands to install the packages and create the database
+```
+composer install
+php artisan migrate
+```
+
+ Now the website should be accessible via [this link](http://myapp.test) and the phpmyadmin via [this link](http://localhost:8081/index.php) 
 
  This project is based on the [blog](https://polcode.com/resources/blog/how-to-run-a-laravel-application-locally-with-docker/) 
