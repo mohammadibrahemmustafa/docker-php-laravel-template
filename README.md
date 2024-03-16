@@ -10,37 +10,33 @@ It contains:
 - Nginx
 
 # How to use:
-1. Clone the project
+1. Clone the project (you need to have ssh key)
 ```
-git clone https://github.com/mohammadibrahemmustafa/docker-php-template.git
+git clone git@github.com:mohammadibrahemmustafa/docker-php-laravel-template.git
 ```
 2. Go to the project
 ```
     cd docker-php-template
 ```
-1. Add a project folder
-```
-    mkdir project
-```
-2. Copy .env file
+3. Copy .env file
 ```
     cp .env.example .env
 ```
-2. Copy .env file for the project
+4. Copy .env file for the project
 
 ```
     cp project/.env.example project/.env
 ```
-3. Build the containers
+5. Build the containers
 ```
 docker-compose up --build
 ```
-4. Go to the php container 
+6. Go to the php container 
 ```
 docker exec -it {container_name} bash
 ```
 
-5. Run the commands to install the packages and create the database tables
+7. Run the commands to install the packages and create the database tables
 ```
 composer install
 php artisan migrate
