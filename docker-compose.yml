@@ -3,7 +3,6 @@ services:
    database:
        image: mysql:5.7
        container_name: ${APP_NAME}_mysql
-       restart: always
        environment:
            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
            MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -26,13 +25,11 @@ services:
          - "${PORT_REDIS}:6379"
        volumes:
          - "./data/redis:/data"
-       restart: always
    myadmin:
        image: phpmyadmin/phpmyadmin
        container_name: ${APP_NAME}_phpmyadmin
        ports:
            - ${PORT_PHPMYADMIN}:80
-       restart: always
        links:
            - database:db
        depends_on:
@@ -53,7 +50,6 @@ services:
        entrypoint: sh /bin/entrypoint.sh php-fpm
        links:
            - database:mysqldb
-       restart: always
        volumes:
            - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
            - ${APP_PATH}:/var/www/html
@@ -65,7 +61,6 @@ services:
        ports:
            - ${PORT_HTTP}:80
            - ${PORT_HTTPS}:443
-       restart: always
        volumes:
            - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
            - "./etc/nginx/app.conf:/etc/nginx/sites-available/application.conf"
