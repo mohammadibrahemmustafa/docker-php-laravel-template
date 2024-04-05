@@ -44,4 +44,4 @@ php artisan migrate
 
  Now the website should be accessible via [this link](http://localhost:8000) and the phpmyadmin via [this link](http://localhost:8081/index.php) 
 
- This project is based on the [blog](https://polcode.com/resources/blog/how-to-run-a-laravel-application-locally-with-docker/) 
+ This project is based on the [blog](https://polcode.com/resources/blog/how-to-run-a-laravel-application-locally-with-docker/)
