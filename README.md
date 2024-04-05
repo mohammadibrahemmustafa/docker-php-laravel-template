@@ -16,16 +16,16 @@ git clone git@github.com:mohammadibrahemmustafa/docker-php-laravel-template.git
 ```
 2. Go to the project
 ```
-    cd docker-php-template
+cd docker-php-template
 ```
 3. Copy .env file
 ```
-    cp .env.example .env
+cp .env.example .env
 ```
 4. Copy .env file for the project
 
 ```
-    cp project/.env.example project/.env
+cp project/.env.example project/.env
 ```
 5. Build the containers
 ```
